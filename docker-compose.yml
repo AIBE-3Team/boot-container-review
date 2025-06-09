@@ -1,0 +1,27 @@
+services:
+    app:
+      build: .
+      ports:
+        - "${APP_PORT}:8080"
+      env_file:
+        - ".env"
+      networks:
+        - "guini-network"
+      depends_on:
+        - postgres
+      command: ["sh", "-c", "sleep10 && java -jar app.jar"]
+    postgres:
+      image: "postgres:16-alpine"
+      env_file:
+        - ".env"
+      ports:
+        - "${DB_PORT}:5432"
+      volumes:
+        - "db-data:/var/lib/postgresql/data"
+      networks:
+        - "guini-network"
+volumes:
+  db-data:
+
+networks:
+  guini-network:
